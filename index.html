@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <title>VUEJS - NINJA</title>
+</head>
+<body>
+    
+    <div id="app">
+        <h2> {{titulo}}</h2>
+       <br><br><br>
+
+       
+       <div class="container mb-5">
+           <button @click="getUsers" class="btn btn-secondary">Get Users</button>
+           <div v-if="response.status == 'error'" class="alert alert-danger">{{response.msg}}</div>
+       
+           <div v-if="loader.users">Carregando usuários...</div>
+           
+              <ul>
+               <li v-for="user in users">{{user.name}}</li>
+              </ul>
+    </div>
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+
+    <script src="https://unpkg.com/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+    <script>
+        
+        var mixin = {
+            methods: {
+                getUsers() {
+                    this.loader.users = true;
+                    var url = 'https://jsonplaceholder.typicode.com/users'
+                    this.$http
+                        .get(url)
+                        .then(function(res) {
+                            this.users = res.body;
+                        })
+                        .catch(function(error){
+                            this.response.status = "error";
+                            console.log(error);
+                        })
+                        .finally(function(){
+                            this.loader.users = false;
+                        })
+                }
+            }
+        }
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+            titulo: "Vuejs NINJA MODE",
+            users: [],
+            loader: {
+                users: false,
+            },
+            response: {
+             msg: "Erro ao conectar"   ,
+             status: ""
+            }
+            },
+            mixins: [mixin],
+
+            methods: {
+
+            },
+
+
+        });
+        
+
+    </script>
+</body>
+</html>
