@@ -15,7 +15,7 @@
 
        
        <div class="container mb-5">
-           <button @click="getUsers" class="btn btn-secondary">Get Users</button>
+           <button @click="getUsers" class="btn btn-secondary mb-5">Get Users</button>
            <div v-if="response.status == 'error'" class="alert alert-danger">{{response.msg}}</div>
        
            <div v-if="loader.users">Carregando usuários...</div>
@@ -38,7 +38,8 @@
 
 
     <script src="https://unpkg.com/vue@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 
     <script>
@@ -48,18 +49,27 @@
                 getUsers() {
                     this.loader.users = true;
                     var url = 'https://jsonplaceholder.typicode.com/users'
-                    this.$http
-                        .get(url)
-                        .then(function(res) {
-                            this.users = res.body;
-                        })
-                        .catch(function(error){
-                            this.response.status = "error";
-                            console.log(error);
-                        })
-                        .finally(function(){
-                            this.loader.users = false;
-                        })
+                    var vm = this;
+                    axios.get(url)
+                    .then( function(r) {
+                        vm.users = r.data;
+                        vm.loader.users = false;
+                    }
+
+                    )
+
+                   //this.$http
+                   //    .get(url)
+                   //    .then(function(res) {
+                   //        this.users = res.body;
+                   //    })
+                   //    .catch(function(error){
+                   //        this.response.status = "error";
+                   //        console.log(error);
+                   //    })
+                   //    .finally(function(){
+                   //        this.loader.users = false;
+                   //    })
                 }
             }
         }
